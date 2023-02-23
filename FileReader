@@ -1,0 +1,175 @@
+package rajmft4;
+
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.Scanner;
+
+
+/**
+ * // Homework 4
+ *
+ * /*
+ * rajmft 
+ */
+
+
+public class Main {
+
+	public static void main(String[] args) throws IOException{
+	    	
+// Program Info		
+		System.out.println("\nThis program loads to an array a list of 50 grades read from a file.\r\n"
+				+ "Once the scores have been loaded to the array, provide the user with a menu of options:\r\n"
+				+ " A. Print the grades to the screen sorted in ascending order\r\n"
+				+ " B. Calculate and print to the screen the average value of the scores\r\n"
+				+ " C. Calculate and print to the screen the standard deviation of the scores\r\n"
+				+ " D. Print the grades to a file sorted in ascending order, along with the average value\r\n"
+				+ " and standard deviation of the scores\r\n"
+				+ " E. Quit");
+		
+	
+//Creating file reference		
+		File file = new File("gradesIn.txt");
+        Scanner fileInput = new Scanner(file);
+        
+
+//Reading from file and creating array        
+        int[] array = new int[50];
+        int i = 0;
+        while(fileInput.hasNextInt())
+     	array[i++] = fileInput.nextInt();
+ 
+		
+// Initializing user choice to be 'a', switch will start		
+		
+		char choice = 'a';
+		
+		do {	
+			
+			
+			System.out.println("\n*******************[^_^]-<^>-[^_^]********************************\r\n"
+					+ "			Menu:                                    *\r\n"
+					+ "> A - Show Grades in Ascending Order.                            *\r\n"
+					+ "> B - Calculate and Print Average of Grades                      *\r\n"               				
+					+ "> C - Calculate and Print Standard Deviation of Grades           *\r\n"
+					+ "> D - Create File with Grades, Average, and Standard Deviation   * \r\n"
+					+ "> E - Quit                                                       * \r\n"
+					+ "******************************************************************\r\n");
+			
+			System.out.print("Enter a letter for your choice on the menu (A, B, C, D, or E): ");
+			Scanner input = new Scanner(System.in);
+			choice = input.next().charAt(0);
+			
+// Start switch		
+			
+	    switch(choice){
+		
+		case 'A', 'a':
+			sortArrayMethod(array);
+		    System.out.print("The array in ascending order is: ");
+		    printArrayMethod(array);
+		    System.out.println();		    
+		    break;
+			
+		case 'B', 'b':
+			System.out.printf("The Average of the Grades is: %.3f ", averageArrayMethod(array));
+		    System.out.println();
+		    break;
+		    
+		case 'C','c':
+			System.out.printf("The Standard Deviation of the Grades is: %.3f",StandDev(array));
+		    System.out.println();
+		    break;
+		    
+		case 'D','d':
+			printToFileArray(array);
+		    break;
+
+		}
+		
+		}while(choice != 'e' && choice != 'E');
+		
+		
+		System.out.print("Thank you for using my program!");
+		
+// Close file		
+		fileInput.close();
+
+	}
+
+
+
+
+// Methods 
+	
+public static void sortArrayMethod(int[] array) {
+	Arrays.sort(array);
+}
+
+
+public static void printArrayMethod(int[] array) {
+	for (int i = 0; i < array.length; i++) {
+		System.out.print(array[i] + " ");	    
+	}
+}
+
+
+public static double averageArrayMethod(int[] array) {
+	int sum = 0;
+	double average = 0;
+	for (int i = 0; i < array.length; i++) {
+		sum += array[i];
+	}
+	average = (double)sum/array.length;
+	return average;		
+}
+
+public static double StandDev(int[] array) {
+	int sum = 0;
+	int average = 0;
+	double standDev = 0.0;
+	
+	
+    // Calculating average by traversing array	
+	for (int i = 0; i < array.length; i++) {         
+		sum += array[i];
+	}	
+	average = sum/array.length;
+	
+    // Calculating standard deviation	
+	for (int i = 0; i < array.length; i++) {
+		standDev += Math.pow(array[i] - average, 2);      
+
+	}
+	return Math.sqrt(standDev/array.length);
+}
+
+ 
+public static void printToFileArray(int[] array) throws FileNotFoundException {
+    // Creating reference	
+	PrintWriter writer = new PrintWriter("gradesOut.txt");	        
+    
+	sortArrayMethod(array);		    
+    
+	// Printing sorted array
+    writer.print("The array in ascending order is: ");
+    for (int i = 0; i < array.length; i++) {
+		writer.print(array[i] + " ");	    
+	}
+    writer.format("\n\nThe Average of the Grades is: %.3f ", averageArrayMethod(array));
+    writer.format("\nThe Standard Deviation of the Grades is: %.3f",StandDev(array));   
+    
+    // Closing file
+    writer.close();
+	
+	
+}
+
+
+
+}
+
